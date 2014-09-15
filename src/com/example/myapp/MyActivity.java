@@ -1,20 +1,20 @@
 package com.example.myapp;
 
-        import java.io.*;
-        import java.net.HttpURLConnection;
-        import java.net.URL;
-        import android.app.Activity;
-        import android.app.AlertDialog;
-        import android.app.ProgressDialog;
-        import android.content.DialogInterface;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.os.StrictMode;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.TextView;
-        import android.widget.Toast;
-        import org.json.JSONObject;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import org.json.JSONObject;
 
 public class MyActivity extends Activity
 {
