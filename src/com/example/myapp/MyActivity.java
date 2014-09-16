@@ -23,6 +23,7 @@ public class MyActivity extends Activity
     private String srcPath = "/data/git.png";
     // 服务器上接收文件的处理页面，这里根据需要换成自己的
     private String actionUrl = "http://www.weloong.net/upload.php";
+    private TextView appTitle;
     private TextView mText1;
     private TextView mText2;
     private TextView mTextResult;
@@ -33,10 +34,9 @@ public class MyActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        MyApp myApp = (MyApp)getApplication();
+        appTitle = (TextView) findViewById(R.id.applicationTitle);
+        appTitle.setText(myApp.user.getUserName());
         mText1 = (TextView) findViewById(R.id.title);
         mTextResult = (TextView) findViewById(R.id.result);
         mText1.setText("文件路径：\n" + uploadFile);
@@ -54,6 +54,7 @@ public class MyActivity extends Activity
             }
         });
     }
+
     // show Dialog method
     private void showDialog(String mess) {
         new AlertDialog.Builder(MyActivity.this).setTitle("Message")
