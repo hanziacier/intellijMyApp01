@@ -1,0 +1,15 @@
+*.class
+*.apk
+build.xml
+local.properties
+itellijMyApp01.iml
+ant.properties
+projuard-project.txt
+project.properties
+bin/
+gen/
+.settings/
+proguard/
+out/
+.idea/
+.svn/
