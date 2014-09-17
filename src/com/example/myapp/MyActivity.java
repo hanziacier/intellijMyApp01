@@ -7,9 +7,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,6 +24,8 @@ import org.json.JSONObject;
 
 public class MyActivity extends Activity
 {
+    private static final int SELECT_PICTURE = 10;
+    private static final int SELECT_CAMER = 20;
     // 要上传的文件路径，理论上可以传输任何文件，实际使用时根据需要处理
     private String uploadFile = "/data/git.png";
     private String srcPath = "/data/git.png";
@@ -49,10 +57,28 @@ public class MyActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                FileUploadTask fileuploadtask = new FileUploadTask();
-                fileuploadtask.execute();
+                CharSequence[] items = {"相册", "相机"};
+                new AlertDialog.Builder(MyActivity.this)
+                        .setTitle("选择图片来源")
+                        .setItems(items, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if( which == 0 ){
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                    intent.setType("image/*");
+                                    startActivityForResult(Intent.createChooser(intent, "选择图片"), SELECT_PICTURE);
+                                }else{
+                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    startActivityForResult(intent, SELECT_CAMER);
+                                }
+                            }
+                        })
+                        .create().show();
+                //FileUploadTask fileuploadtask = new FileUploadTask();
+                //fileuploadtask.execute();
             }
         });
+
     }
 
     // show Dialog method
@@ -65,7 +91,29 @@ public class MyActivity extends Activity
                     }
                 }).show();
     }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            String [] proj={MediaStore.Images.Media.DATA};
+            Cursor cursor = managedQuery( uri,
+                    proj,                 // Which columns to return
+                    null,       // WHERE clause; which rows to return (all rows)
+                    null,       // WHERE clause selection arguments (none)
+                    null);                 // Order-by clause (ascending by name)
 
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+
+            String path = cursor.getString(column_index);
+            Bitmap bmp = BitmapFactory.decodeFile(path);
+            mText1.setText("文件路径：\n" + path);
+            System.out.println("the path is :" + path);
+        }else{
+            Toast.makeText(MyActivity.this, "请重新选择图片", Toast.LENGTH_SHORT).show();
+        }
+
+    }
     class FileUploadTask extends AsyncTask<Object, Integer, Void> {
 
         private ProgressDialog dialog = null;

@@ -30,4 +30,13 @@ public class User {
         return this.pic;
     }
 
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+    public void User(String userName, String email, String pic, int id) {
+        this.userName = userName;
+        this.email = email;
+        this.pic = pic;
+        this.id = id;
+    }
 }
